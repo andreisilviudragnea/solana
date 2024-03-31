@@ -29,10 +29,10 @@ getrandom = { version = "0.1", features = ["dummy"] }
 itertools = { workspace = true }
 lazy_static = { workspace = true }
 merlin = { workspace = true }
-rand = { version = "0.8" }
+rand = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
-sha3 = "0.9"
+sha3 = { workspace = true }
 solana-sdk = { workspace = true }
 subtle = { workspace = true }
 zeroize = { workspace = true, features = ["zeroize_derive"] }
