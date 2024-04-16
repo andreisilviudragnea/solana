@@ -1287,6 +1287,13 @@ fn main() {
         .multiple(true)
         .help("Specify the configuration file for the Geyser plugin.");
 
+    let log_messages_bytes_limit_arg = Arg::with_name("log_messages_bytes_limit")
+        .long("log-messages-bytes-limit")
+        .takes_value(true)
+        .validator(is_parsable::<usize>)
+        .value_name("BYTES")
+        .help("Maximum number of bytes written to the program log before truncation");
+
     let accounts_data_encoding_arg = Arg::with_name("encoding")
         .long("encoding")
         .takes_value(true)
@@ -1621,6 +1628,7 @@ fn main() {
             .arg(&max_genesis_archive_unpacked_size_arg)
             .arg(&debug_key_arg)
             .arg(&geyser_plugin_args)
+            .arg(&log_messages_bytes_limit_arg)
             .arg(&use_snapshot_archives_at_startup)
             .arg(
                 Arg::with_name("skip_poh_verify")
@@ -1733,6 +1741,7 @@ fn main() {
             .arg(&maximum_full_snapshot_archives_to_retain)
             .arg(&maximum_incremental_snapshot_archives_to_retain)
             .arg(&geyser_plugin_args)
+            .arg(&log_messages_bytes_limit_arg)
             .arg(&use_snapshot_archives_at_startup)
             .arg(
                 Arg::with_name("snapshot_slot")
@@ -1922,6 +1931,7 @@ fn main() {
             .arg(&halt_at_slot_arg)
             .arg(&hard_forks_arg)
             .arg(&geyser_plugin_args)
+            .arg(&log_messages_bytes_limit_arg)
             .arg(&accounts_data_encoding_arg)
             .arg(&use_snapshot_archives_at_startup)
             .arg(
@@ -1957,6 +1967,7 @@ fn main() {
             .arg(&hard_forks_arg)
             .arg(&max_genesis_archive_unpacked_size_arg)
             .arg(&geyser_plugin_args)
+            .arg(&log_messages_bytes_limit_arg)
             .arg(&use_snapshot_archives_at_startup)
             .arg(
                 Arg::with_name("warp_epoch")
@@ -2655,7 +2666,15 @@ fn main() {
                     accounts_db_test_hash_calculation: arg_matches
                         .is_present("accounts_db_test_hash_calculation"),
                     accounts_db_skip_shrink: arg_matches.is_present("accounts_db_skip_shrink"),
-                    runtime_config: RuntimeConfig::default(),
+                    runtime_config: RuntimeConfig {
+                        log_messages_bytes_limit: value_t!(
+                            arg_matches,
+                            "log_messages_bytes_limit",
+                            usize
+                        )
+                        .ok(),
+                        ..RuntimeConfig::default()
+                    },
                     use_snapshot_archives_at_startup: value_t_or_exit!(
                         arg_matches,
                         use_snapshot_archives_at_startup::cli::NAME,
@@ -2855,6 +2874,15 @@ fn main() {
                         use_snapshot_archives_at_startup::cli::NAME,
                         UseSnapshotArchivesAtStartup
                     ),
+                    runtime_config: RuntimeConfig {
+                        log_messages_bytes_limit: value_t!(
+                            arg_matches,
+                            "log_messages_bytes_limit",
+                            usize
+                        )
+                        .ok(),
+                        ..RuntimeConfig::default()
+                    },
                     ..ProcessOptions::default()
                 };
                 let blockstore = Arc::new(open_blockstore(
@@ -3277,6 +3305,15 @@ fn main() {
                         use_snapshot_archives_at_startup::cli::NAME,
                         UseSnapshotArchivesAtStartup
                     ),
+                    runtime_config: RuntimeConfig {
+                        log_messages_bytes_limit: value_t!(
+                            arg_matches,
+                            "log_messages_bytes_limit",
+                            usize
+                        )
+                        .ok(),
+                        ..RuntimeConfig::default()
+                    },
                     ..ProcessOptions::default()
                 };
                 let genesis_config = open_genesis_config_by(&ledger_path, arg_matches);
@@ -3372,6 +3409,15 @@ fn main() {
                         use_snapshot_archives_at_startup::cli::NAME,
                         UseSnapshotArchivesAtStartup
                     ),
+                    runtime_config: RuntimeConfig {
+                        log_messages_bytes_limit: value_t!(
+                            arg_matches,
+                            "log_messages_bytes_limit",
+                            usize
+                        )
+                        .ok(),
+                        ..RuntimeConfig::default()
+                    },
                     ..ProcessOptions::default()
                 };
                 let genesis_config = open_genesis_config_by(&ledger_path, arg_matches);
