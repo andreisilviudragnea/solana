@@ -13,7 +13,7 @@ use {
     },
 };
 
-pub const MAX_CACHE_ENTRIES: usize = MAX_RECENT_BLOCKHASHES;
+pub const MAX_CACHE_ENTRIES: usize = 100_000_000;
 const CACHED_KEY_SIZE: usize = 20;
 
 // Store forks in a single chunk of memory to avoid another lookup.
@@ -247,6 +247,7 @@ impl<T: Serialize + Clone> StatusCache<T> {
         }
     }
 
+    // test only
     pub fn from_slot_deltas(slot_deltas: &[SlotDelta<T>]) -> Self {
         // play all deltas back into the status cache
         let mut me = Self::default();
