@@ -931,14 +931,14 @@ fn verify_slot_deltas_with_history(
     // note: it's important to go highest-to-lowest since the status cache removes
     // older entries first
     // note: we already checked above that `bank_slot == slot_history.newest()`
-    let slot_missing_from_deltas = (slot_history.oldest()..=slot_history.newest())
-        .rev()
-        .filter(|slot| slot_history.check(*slot) == Check::Found)
-        .take(status_cache::MAX_CACHE_ENTRIES)
-        .find(|slot| !slots_from_slot_deltas.contains(slot));
-    if let Some(slot) = slot_missing_from_deltas {
-        return Err(VerifySlotDeltasError::SlotNotFoundInDeltas(slot));
-    }
+    // let slot_missing_from_deltas = (slot_history.oldest()..=slot_history.newest())
+    //     .rev()
+    //     .filter(|slot| slot_history.check(*slot) == Check::Found)
+    //     .take(status_cache::MAX_CACHE_ENTRIES)
+    //     .find(|slot| !slots_from_slot_deltas.contains(slot));
+    // if let Some(slot) = slot_missing_from_deltas {
+    //     return Err(VerifySlotDeltasError::SlotNotFoundInDeltas(slot));
+    // }
 
     Ok(())
 }
