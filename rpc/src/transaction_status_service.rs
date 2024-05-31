@@ -145,7 +145,6 @@ impl TransactionStatusService {
                             transaction_notifier.notify_transaction(
                                 slot,
                                 transaction_index,
-                                transaction.signature(),
                                 &transaction_status_meta,
                                 &transaction,
                             );
@@ -263,7 +262,6 @@ pub(crate) mod tests {
             &self,
             slot: Slot,
             transaction_index: usize,
-            signature: &Signature,
             transaction_status_meta: &TransactionStatusMeta,
             transaction: &SanitizedTransaction,
         ) {
@@ -271,7 +269,7 @@ pub(crate) mod tests {
                 TestNotifierKey {
                     slot,
                     transaction_index,
-                    signature: *signature,
+                    signature: *transaction.signature(),
                 },
                 TestNotification {
                     _meta: transaction_status_meta.clone(),

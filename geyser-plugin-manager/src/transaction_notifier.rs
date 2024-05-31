@@ -26,17 +26,12 @@ impl TransactionNotifier for TransactionNotifierImpl {
         &self,
         slot: Slot,
         index: usize,
-        signature: &Signature,
         transaction_status_meta: &TransactionStatusMeta,
         transaction: &SanitizedTransaction,
     ) {
         let mut measure = Measure::start("geyser-plugin-notify_plugins_of_transaction_info");
-        let transaction_log_info = Self::build_replica_transaction_info(
-            index,
-            signature,
-            transaction_status_meta,
-            transaction,
-        );
+        let transaction_log_info =
+            Self::build_replica_transaction_info(index, transaction_status_meta, transaction);
 
         let plugin_manager = self.plugin_manager.read().unwrap();
 
@@ -84,13 +79,12 @@ impl TransactionNotifierImpl {
 
     fn build_replica_transaction_info<'a>(
         index: usize,
-        signature: &'a Signature,
         transaction_status_meta: &'a TransactionStatusMeta,
         transaction: &'a SanitizedTransaction,
     ) -> ReplicaTransactionInfoV2<'a> {
         ReplicaTransactionInfoV2 {
             index,
-            signature,
+            signature: transaction.signature(),
             is_vote: transaction.is_simple_vote_transaction(),
             transaction,
             transaction_status_meta,

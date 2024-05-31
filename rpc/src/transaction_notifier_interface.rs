@@ -9,7 +9,6 @@ pub trait TransactionNotifier {
         &self,
         slot: Slot,
         transaction_slot_index: usize,
-        signature: &Signature,
         transaction_status_meta: &TransactionStatusMeta,
         transaction: &SanitizedTransaction,
     );
